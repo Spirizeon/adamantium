@@ -7,7 +7,7 @@ RUN chmod +x adam_engine/radare.sh
 RUN ./adam_engine/radare.sh
 RUN pip install -r adam_engine/requirements.txt --break-system-packages
 RUN r2pm -ci r2ghidra r2ghidra-sleigh
-CMD ["uvicorn","main:app","--reload"]
+CMD ["uvicorn","main:app","--host","0.0.0.0","--reload"]
 
 
 
