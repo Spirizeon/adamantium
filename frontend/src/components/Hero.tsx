@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import Cookies from '../../node_modules/@types/js-cookie';
+import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
 const Hero = () => {

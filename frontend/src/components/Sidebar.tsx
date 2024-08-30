@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { Copy, Trash, User } from 'lucide-react';
 import toast from 'react-hot-toast';
-import Cookies from '../../node_modules/@types/js-cookie';
+import Cookies from 'js-cookie';
 
 const Sidebar = () => {
   const [apiKey, setApiKey] = useState('');
