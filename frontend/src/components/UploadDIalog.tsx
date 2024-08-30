@@ -28,17 +28,19 @@ const UploadDialog: React.FC = () => {
     setUploading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('key', '');
     const savedApiKey = Cookies.get('api_key');
     if (!savedApiKey) {
       toast.error("api key not found");
       return;
     }
 
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('key', savedApiKey);
+
+
     try {
-      const response = await axios.post('http://0.0.0.0:8000/submit/', formData, {
+      const response = await axios.post('http://localhost:8000/submit/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -47,7 +49,7 @@ const UploadDialog: React.FC = () => {
       toggleModal();
       toast.success('File uploaded successfully!');
     } catch (err) {
-      // Handle error
+      console.log(err)
       setError('Upload failed. Please try again.');
     } finally {
       setUploading(false);
