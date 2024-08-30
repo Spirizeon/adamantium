@@ -2,34 +2,54 @@
 import DownloadButton from "@/components/DownloadButton"
 import UploadDIalog from "@/components/UploadDIalog"
 import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 
 
-interface FileData {
+interface IFile {
+  _id: string;
   report: string;
   filesize: number;
   filename: string;
+  created_at: string;
 }
 
 const Dashboard = () => {
+  const [files, setFiles] = useState<IFile[]>([]);
 
-  const sendPostRequest = async () => {
-
-    const fileData: FileData = {
-      report: 'some-report-data',
-      filesize: 12345,
-      filename: 'file.txt',
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const response = await axios.get('/api/file');
+        if (!response.status) throw new Error('Failed to fetch files');
+        const data = response.data.data;
+        console.log(data);
+        setFiles(data);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
+    fetchFiles();
+
+  }, [])
+
+  const removeFile = async (fileId: string) => {
     try {
-      const response = await axios.post('api/file', fileData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`/api/file/${fileId}`, {
+        method: 'DELETE',
       });
-      console.log('Response:', response.data);
-    } catch (error: any) {
-      console.error('Error:', error.response?.data || error.message);
+      if (!response.ok) throw new Error('Failed to remove file');
+
+      setFiles(prevFiles => prevFiles.filter(file => file._id !== fileId));
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
+
+
+
+
+
   return (
     <section className="container px-4 py-10 sm:mx-auto">
       <div className="sm:flex flex-col mt-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
@@ -61,107 +81,54 @@ const Dashboard = () => {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
-
-                    <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                      <div className="flex items-center gap-x-3">
-                        {/* <input type="checkbox" className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700" /> */}
-                        <span>File name</span>
-                      </div>
-                    </th>
-
-                    <th scope="col" className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                      File size
-                    </th>
-
-                    <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                      Date uploaded
-                    </th>
-
-                    <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                      Download Report
-                    </th>
-
-                    <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                      Delete Report
-                    </th>
-
-
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
+                    <th className="px-12 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Download</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  <tr>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                  {
 
-                    <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-
-
-                        <div className="flex items-center gap-x-2">
-                          <div className="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                            </svg>
-                          </div>
-
-                          <div>
-                            <h2 className="font-normal text-gray-800 dark:text-white ">helloWorld.out</h2>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400">200 KB</p>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                      200 KB
-                    </td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">Jan 4, 2022</td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                      <DownloadButton />
-                    </td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                      <button
-                        className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
-                      >
-                        Delete
-                      </button>
-                    </td>
-
-                  </tr>
-                  <tr>
-
-                    <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-x-3">
-
-
-                        <div className="flex items-center gap-x-2">
-                          <div className="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                            </svg>
-                          </div>
-
-                          <div>
-                            <h2 className="font-normal text-gray-800 dark:text-white ">helloWorld.out</h2>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400">200 KB</p>
+                  }
+                  {files.map((file) => (
+                    <tr key={file.filename}> {/* Consider using a unique ID if filenames might not be unique */}
+                      <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                        <div className="inline-flex items-center gap-x-3">
+                          <div className="flex items-center gap-x-2">
+                            <div className="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <h2 className="font-normal text-gray-800 dark:text-white">{file.filename}</h2>
+                              <p className="text-xs font-normal text-gray-500 dark:text-gray-400">{file.filesize} KB</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                      200 KB
-                    </td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">Jan 4, 2022</td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                      <DownloadButton />
-                    </td>
-                    <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                      <button
-                        onClick={sendPostRequest}
-                        className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
-                      >
-                        Delete
-                      </button>
-                    </td>
+                      </td>
+                      <td className="px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
+                        {file.filesize} KB
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                        {file.created_at ? new Date(file.created_at).toLocaleDateString() : 'N/A'}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                        <DownloadButton filename={file.filename.split('.').slice(0, -1).join('.')} report={file.report} /> {/* Ensure this component is imported and implemented */}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                        <button
+                          onClick={() => { removeFile(file._id) }}
+                          className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
 
-                  </tr>
                 </tbody>
               </table>
             </div>
