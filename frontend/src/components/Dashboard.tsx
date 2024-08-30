@@ -1,7 +1,35 @@
+'use client'
 import DownloadButton from "@/components/DownloadButton"
 import UploadDIalog from "@/components/UploadDIalog"
+import axios from "axios";
+
+
+interface FileData {
+  report: string;
+  filesize: number;
+  filename: string;
+}
 
 const Dashboard = () => {
+
+  const sendPostRequest = async () => {
+
+    const fileData: FileData = {
+      report: 'some-report-data',
+      filesize: 12345,
+      filename: 'file.txt',
+    };
+    try {
+      const response = await axios.post('api/file', fileData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Response:', response.data);
+    } catch (error: any) {
+      console.error('Error:', error.response?.data || error.message);
+    }
+  }
   return (
     <section className="container px-4 py-10 sm:mx-auto">
       <div className="sm:flex flex-col mt-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
@@ -16,7 +44,7 @@ const Dashboard = () => {
               </svg>
             </span>
 
-            <input type="text" value="Search" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+            <input type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
           </div>
           {/* <button className="w-1/2 px-5 py-2 text-sm text-gray-800 transition-colors duration-200 bg-white border rounded-lg sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-white dark:border-gray-700">
             Download all
@@ -126,6 +154,7 @@ const Dashboard = () => {
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                       <button
+                        onClick={sendPostRequest}
                         className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
                       >
                         Delete
