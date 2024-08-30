@@ -3,8 +3,17 @@ from fastapi.responses import JSONResponse
 import subprocess
 import os
 import requests
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 #FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
 FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container

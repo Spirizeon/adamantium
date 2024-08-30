@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 const UploadDialog: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,9 +30,15 @@ const UploadDialog: React.FC = () => {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('key', '');
+    const savedApiKey = Cookies.get('api_key');
+    if (!savedApiKey) {
+      toast.error("api key not found");
+      return;
+    }
 
     try {
-      const response = await axios.post('http://localhost:8000/uploadfile/', formData, {
+      const response = await axios.post('http://0.0.0.0:8000/submit/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
