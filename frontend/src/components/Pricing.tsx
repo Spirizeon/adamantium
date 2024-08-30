@@ -13,7 +13,7 @@ interface Plan {
 const plans: Plan[] = [
   {
     name: "Free",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    desc: "Ideal for basic use. Includes 5 files and support for Windows executables and compiled files.",
     price: 0,
     isMostPop: false,
     features: [
@@ -24,7 +24,7 @@ const plans: Plan[] = [
   },
   {
     name: "Member",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    desc: "Perfect for growing needs. Manage up to 15 files with support for Windows and Linux executables.",
     price: 35,
     isMostPop: true,
     features: [
@@ -36,7 +36,7 @@ const plans: Plan[] = [
   },
   {
     name: "Pro",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    desc: "For advanced projects. Handle unlimited files with support for all major file types and executables.",
     price: 60,
     isMostPop: false,
     features: [
@@ -50,20 +50,23 @@ const plans: Plan[] = [
   },
 ];
 
+
+
 const PricingSection: React.FC = () => {
   return (
     <section className='py-14 bg-transparent pattern'>
       <div className="max-w-screen-xl mx-auto px-4 text-gray-300 md:px-8">
         <div className='relative max-w-xl mx-auto sm:text-center'>
           <h3 className='text-gray-200 text-3xl font-semibold sm:text-4xl'>
-            Pricing for all sizes
+            Pricing
           </h3>
           <div className='mt-3 max-w-xl'>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur consequat nunc.
+              Explore our flexible pricing plans designed to fit various needs. Choose from basic, growing, and advanced options to find the perfect fit for you.
             </p>
           </div>
         </div>
+
         <div className='mt-16 justify-center gap-6 sm:grid sm:grid-cols-2 sm:space-y-0 lg:grid-cols-3'>
           {plans.map((item, idx) => (
             <div
