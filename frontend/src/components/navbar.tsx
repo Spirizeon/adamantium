@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface NavigationItem {
   title: string;
@@ -18,7 +19,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-transparent w-full border-b fixed top-0  md:border-0 ">
+    <nav className=" bg-black z-50 w-full  fixed top-0  md:border-0 ">
       <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">
         <div className="flex items-center justify-between py-3 md:py-5 md:block">
           <a href="javascript:void(0)" className='flex items-center justify-center gap-2'>
@@ -79,12 +80,12 @@ const Navbar: React.FC = () => {
           </ul>
         </div>
         <div className="hidden md:inline-block">
-          <a
-            href="javascript:void(0)"
+          <Link
+            href="/dashboard"
             className="py-3 px-4 text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow"
           >
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
