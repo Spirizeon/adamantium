@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 import subprocess
 import os
@@ -6,10 +6,13 @@ import requests
 
 app = FastAPI()
 
+#FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
 FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
 
 @app.post("/submit")
-async def submit_file(file: UploadFile = File(...)):
+async def submit_file(file: UploadFile = File(...),
+                      key: str=Form(...)):
+    os.environ["ANTHROPIC_API_KEY"] = key
     # Check the file extension
     allowed_extensions = {'.exe', '.out', ''}
     extension = file.filename.split('.')[-1] if '.' in file.filename else ''
@@ -24,7 +27,7 @@ async def submit_file(file: UploadFile = File(...)):
 
         # Process the file with test3.py
         process = subprocess.run(
-            ["python3", "test3.py", temp_file_path],
+            ["python3", "adam_engine/test3.py", temp_file_path],
             capture_output=True,
             text=True
         )
