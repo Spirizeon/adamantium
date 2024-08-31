@@ -44,7 +44,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ report, filename }) => 
   return (
     <button
       onClick={handleDownload}
-      className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none sm:mx-2"
+      className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none sm:mx-2"
     >
       Download
     </button>

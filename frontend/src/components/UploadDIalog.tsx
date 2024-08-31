@@ -101,7 +101,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
     <div className='relative'>
       <button
         onClick={toggleModal}
-        className="flex gap-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400"
+        className="flex gap-2 text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-400"
         type="button"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,7 +139,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                     </svg>
 
-                    {fileName ? <p className="text-blue-500 text-sm mt-2">{fileName}</p> : <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>}
+                    {fileName ? <p className="text-indigo-500 text-sm mt-2">{fileName}</p> : <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>}
                     <p className="text-xs text-gray-500 dark:text-gray-400">.out .exe </p>
                   </div>
                   <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} />
@@ -153,14 +153,14 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
                   onClick={handleUpload}
                   type="button"
                   disabled={uploading || !file}
-                  className={`flex gap-2 text-white ${uploading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400`}
+                  className={`flex gap-2 text-white ${uploading ? 'bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-700'} focus:ring-4 focus:outline-none focus:ring-indigo-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:focus:ring-indigo-400`}
                 >
                   {uploading ? 'Uploading...' : 'Upload'}
                 </button>
                 <button
                   onClick={toggleModal}
                   type="button"
-                  className="text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-700 text-sm px-5 py-2.5"
+                  className="text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-indigo-600 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-700 text-sm px-5 py-2.5"
                 >
                   Cancel
                 </button>

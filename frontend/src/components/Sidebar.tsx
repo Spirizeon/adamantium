@@ -86,7 +86,7 @@ const Sidebar = () => {
                 type="text"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                className="w-full py-1.5 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
+                className="w-full py-1.5 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-indigo-400 dark:focus:border-indigo-300 focus:ring-indigo-300 focus:ring-opacity-40 focus:outline-none focus:ring"
                 placeholder="Claude API Key" />
 
               {isKey ? (
@@ -94,7 +94,7 @@ const Sidebar = () => {
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="px-6 py-1.5 w-full text-sm text-center flex items-center justify-center text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
+                    className="px-6 py-1.5 w-full text-sm text-center flex items-center justify-center text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none"
                   >
                     <Copy size={15} />
                   </button>
@@ -109,7 +109,7 @@ const Sidebar = () => {
               ) : (
                 <button
                   type="submit"
-                  className="px-6 py-2 w-full text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
+                  className="px-6 py-2 w-full text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none"
                 >
                   Submit
                 </button>
@@ -122,7 +122,7 @@ const Sidebar = () => {
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Log In</span>
               </a>
 
-              <a href="#" className="text-gray-500 transition-colors duration-200 rotate-180 dark:text-gray-400 rtl:rotate-0 hover:text-blue-500 dark:hover:text-blue-400">
+              <a href="#" className="text-gray-500 transition-colors duration-200 rotate-180 dark:text-gray-400 rtl:rotate-0 hover:text-indigo-500 dark:hover:text-indigo-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                 </svg>

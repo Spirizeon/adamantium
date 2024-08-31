@@ -54,7 +54,7 @@ const Hero = () => {
             type="text"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            className="px-6 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring sm:mx-2"
+            className="px-6 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-indigo-400 focus:ring-indigo-300 focus:ring-opacity-40 dark:focus:border-indigo-300 focus:outline-none focus:ring sm:mx-2"
             placeholder="Enter Claude API Key"
           />
           {isKey ? (
@@ -62,7 +62,7 @@ const Hero = () => {
               <button
                 type="button"
                 onClick={handleCopy}
-                className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-500 rounded-md hover:bg-green-600 focus:bg-green-600 focus:outline-none"
+                className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none"
               >
                 Copy Key
               </button>
@@ -77,7 +77,7 @@ const Hero = () => {
           ) : (
             <button
               type="submit"
-              className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:bg-blue-600 focus:outline-none sm:mx-2"
+              className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none sm:mx-2"
             >
               Submit
             </button>
