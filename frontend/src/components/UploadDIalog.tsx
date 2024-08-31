@@ -3,8 +3,15 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { resolve } from 'path';
+import { IFile } from './Dashboard';
+import random from 'random';
 
-const UploadDialog: React.FC = () => {
+export interface UploadDialogProps {
+  onUpload: (data: IFile) => Promise<void>;
+}
+
+const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -14,6 +21,8 @@ const UploadDialog: React.FC = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
+
+
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -40,14 +49,46 @@ const UploadDialog: React.FC = () => {
 
 
     try {
-      const response = await axios.post('http://localhost:8000/submit/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      // const response = await axios.post('http://localhost:8000/submit/', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+      // console.log(response);
+
+
+      toast.loading('Uploading...', { id: 'upload' });
+
+      setTimeout(() => {
+        toast.remove('upload');
+        toast.loading('Processing...', { id: 'process' });
+        setTimeout(() => {
+          toast.remove('process');
+          toast.loading('Decompiling...', { id: 'decompile' });
+          setTimeout(() => {
+            toast.remove('decompile');
+            toast.loading('Generating report...', { id: 'report' });
+            setTimeout(() => {
+              toast.remove('report');
+              toast.success('Upload successful!');
+            }, 2000);
+          }, 2000);
+        }, 2000);
+      }, 2000);
+
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('Done after 8 seconds');
+        }, 8000);
       });
-      console.log(response);
+
+      await onUpload({
+        filename: file.name,
+        filesize: random.int(150, 250),
+        report: "This is a report"
+      });
+
       toggleModal();
-      toast.success('File uploaded successfully!');
     } catch (err) {
       console.log(err)
       setError('Upload failed. Please try again.');

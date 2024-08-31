@@ -1,36 +1,36 @@
 'use client'
 import DownloadButton from "@/components/DownloadButton"
 import UploadDIalog from "@/components/UploadDIalog"
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import axios from 'axios';
 
-
-interface IFile {
-  _id: string;
+export interface IFile {
+  _id?: string;
   report: string;
   filesize: number;
   filename: string;
-  created_at: string;
+  created_at?: string;
 }
+
+
 
 const Dashboard = () => {
   const [files, setFiles] = useState<IFile[]>([]);
 
+  const fetchFiles = async () => {
+    try {
+      const response = await axios.get('/api/file');
+      if (!response.status) throw new Error('Failed to fetch files');
+      const data = response.data.data;
+      console.log(data);
+      setFiles(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get('/api/file');
-        if (!response.status) throw new Error('Failed to fetch files');
-        const data = response.data.data;
-        console.log(data);
-        setFiles(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchFiles();
-
   }, [])
 
   const removeFile = async (fileId: string) => {
@@ -45,6 +45,22 @@ const Dashboard = () => {
       console.error(error);
     }
   };
+
+
+
+  const addFile = async (data: IFile) => {
+    try {
+      const response = await axios.post('/api/file/', data);
+      if (response.status !== 201) throw new Error('Failed to add file');
+      const addedFile = response.data.data;
+      console.log(addedFile)
+      setFiles(prevFiles => [...prevFiles, addedFile]);
+      fetchFiles();
+    } catch (error) {
+      console.error('Error adding file:', error);
+    }
+  };
+
 
 
 
@@ -70,7 +86,7 @@ const Dashboard = () => {
             Download all
           </button> */}
 
-          <UploadDIalog />
+          <UploadDIalog onUpload={addFile} />
         </div>
       </div>
 
@@ -120,7 +136,7 @@ const Dashboard = () => {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                         <button
-                          onClick={() => { removeFile(file._id) }}
+                          onClick={() => { removeFile(file._id || '') }}
                           className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
                         >
                           Delete
