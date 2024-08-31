@@ -3,6 +3,9 @@ import DownloadButton from "@/components/DownloadButton"
 import UploadDIalog from "@/components/UploadDIalog"
 import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
+import { LoaderCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import { file } from "pdfkit";
 
 export interface IFile {
   _id?: string;
@@ -16,9 +19,12 @@ export interface IFile {
 
 const Dashboard = () => {
   const [files, setFiles] = useState<IFile[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState("");
 
   const fetchFiles = async () => {
     try {
+      setLoading(true);
       const response = await axios.get('/api/file');
       if (!response.status) throw new Error('Failed to fetch files');
       const data = response.data.data;
@@ -26,6 +32,9 @@ const Dashboard = () => {
       setFiles(data);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -35,14 +44,19 @@ const Dashboard = () => {
 
   const removeFile = async (fileId: string) => {
     try {
+      setDeleteLoading(fileId);
       const response = await fetch(`/api/file/${fileId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Failed to remove file');
 
       setFiles(prevFiles => prevFiles.filter(file => file._id !== fileId));
+      toast.success("Deleted Successfully");
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      setDeleteLoading("");
     }
   };
 
@@ -55,7 +69,6 @@ const Dashboard = () => {
       const addedFile = response.data.data;
       console.log(addedFile)
       setFiles(prevFiles => [...prevFiles, addedFile]);
-      fetchFiles();
     } catch (error) {
       console.error('Error adding file:', error);
     }
@@ -105,48 +118,61 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                  {
-
-                  }
-                  {files.map((file) => (
-                    <tr key={file.filename}> {/* Consider using a unique ID if filenames might not be unique */}
-                      <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="inline-flex items-center gap-x-3">
-                          <div className="flex items-center gap-x-2">
-                            <div className="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                              </svg>
-                            </div>
-                            <div>
-                              <h2 className="font-normal text-gray-800 dark:text-white">{file.filename}</h2>
-                              <p className="text-xs font-normal text-gray-500 dark:text-gray-400">{file.filesize} KB</p>
-                            </div>
-                          </div>
+                  {loading ? (
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td colSpan={5} className="w-full max-h-80 min-h-28 flex items-center justify-center">
+                        {/* Ensure LoaderCircle is properly styled to be centered */}
+                        <div className="flex items-center justify-center w-16 h-16">
+                          <LoaderCircle className="animate-spin text-gray-500 dark:text-gray-300" />
                         </div>
                       </td>
-                      <td className="px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                        {file.filesize} KB
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        {file.created_at ? new Date(file.created_at).toLocaleDateString() : 'N/A'}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        <DownloadButton filename={file.filename.split('.').slice(0, -1).join('.')} report={file.report} /> {/* Ensure this component is imported and implemented */}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        <button
-                          onClick={() => { removeFile(file._id || '') }}
-                          className="px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
-                        >
-                          Delete
-                        </button>
-                      </td>
+                      <td></td>
+                      <td></td>
                     </tr>
-                  ))}
-
+                  ) : (
+                    files.map((file) => (
+                      <tr key={file.filename}>
+                        <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-x-3">
+                            <div className="flex items-center gap-x-2">
+                              <div className="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <h2 className="font-normal text-gray-800 dark:text-white">{file.filename}</h2>
+                                <p className="text-xs font-normal text-gray-500 dark:text-gray-400">{file.filesize} KB</p>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
+                          {file.filesize} KB
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                          {file.created_at ? new Date(file.created_at).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                          <DownloadButton filename={file.filename.split('.').slice(0, -1).join('.')} report={file.report} />
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                          <button
+                            disabled={deleteLoading == file._id}
+                            onClick={() => { removeFile(file._id || '') }}
+                            className="px-6  py-3 text-sm flex items-center disabled:cursor-not-allowed justify-center gap-2 font-medium w-24 tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-500 rounded-md hover:bg-red-600 focus:bg-red-600 focus:outline-none sm:mx-2"
+                          >
+                            {deleteLoading == file._id && <LoaderCircle size={20} className="animate-spin text-gray-100" />}  {deleteLoading == file._id ? "" : "Delete"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
+
             </div>
           </div>
         </div>

@@ -84,7 +84,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
 
       await onUpload({
         filename: file.name,
-        filesize: random.int(150, 250),
+        filesize: file.size,
         report: "This is a report"
       });
 
