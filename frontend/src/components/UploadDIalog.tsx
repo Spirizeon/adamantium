@@ -121,7 +121,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
       await onUpload({
         filename: file.name,
         filesize: file.size,
-        report: report
+        report: response.data
       });
 
       toggleModal();
