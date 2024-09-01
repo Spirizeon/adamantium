@@ -85,7 +85,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
 
     try {
       console.log("Before API Call");
-      const response = await axios.post('http://0.0.0.0:8000/submit/', formData, {
+      const response = await axios.post('http://backend:8000/submit/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

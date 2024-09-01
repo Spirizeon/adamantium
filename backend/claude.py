@@ -1,11 +1,20 @@
 import requests
 import os
 import json
+# import google.generativeai as genai
+
 
 ANTHROPIC_API_KEY = os.environ['ANTHROPIC_API_KEY']
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 
 def send_to_anthropic(prompt):
+    # api_key=ANTHROPIC_API_KEY
+    # model_name=
+    # genai.configure(api_key=api_key)
+    # response = self.model.generate_content([prompt])
+    # if response is None:
+                # raise Exception("Failed to get a response from the model.")
+    #  return response.text            
     headers = {
         "Content-Type": "application/json",
         "x-api-key": ANTHROPIC_API_KEY,

@@ -11,20 +11,26 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://frontend:3000"],  # Allows all origins
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 #FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
 FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
 
+@app.get("/")
+async def greet():
+    return {"message":"Adam engine is running"}
+
 @app.post("/submit")
 async def submit_file(file: UploadFile = File(...),
                       key: str=Form(...)):
     os.environ["ANTHROPIC_API_KEY"] = key
+    print("recieved API KEY")
     # Check the file extension
-    allowed_extensions = {'.exe', '.out', ''}
+    allowed_extensions = {'exe', 'out'}
     extension = file.filename.split('.')[-1] if '.' in file.filename else ''
+
     if extension not in allowed_extensions:
         raise HTTPException(status_code=400, detail="Unsupported file type")
 
@@ -49,13 +55,10 @@ async def submit_file(file: UploadFile = File(...),
         output = process.stdout
 
         # Forward the output to the frontend container's /report endpoint
-        response = requests.post(FRONTEND_CONTAINER_URL, json={"result": output})
+        # response = requests.post(FRONTEND_CONTAINER_URL, json={"result": output})
 
         # Handle the response from the frontend container
-        if response.status_code == 200:
-            return JSONResponse(content=response.json(), status_code=200)
-        else:
-            raise HTTPException(status_code=response.status_code, detail=response.text)
+        return JSONResponse(content=output,status_code=200)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -41,3 +41,4 @@ uvloop==0.20.0
 watchfiles==0.23.0
 websockets==13.0
 Werkzeug==3.0.4
+google-generativeai
