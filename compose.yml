@@ -4,10 +4,16 @@ services:
     build: backend
     ports:
       - "8000:8000"
+    depends_on:
+      - backend
+    networks: 
+      - adam-network
   frontend:
     container_name: frontend
     build: frontend
     ports:
       - "3000:3000"
+    networks:
+      - adam-network
 
 
