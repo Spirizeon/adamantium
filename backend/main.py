@@ -36,7 +36,7 @@ async def submit_file(file: UploadFile = File(...),
 
         # Process the file with test3.py
         process = subprocess.run(
-            ["python3", "adam_engine/test3.py", temp_file_path],
+            ["python3", "test3.py", temp_file_path],
             capture_output=True,
             text=True
         )
