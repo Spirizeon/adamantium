@@ -9,14 +9,14 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://frontend:3000"],  # Allows all origins
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"], 
     allow_headers=["*"], 
 )
 
 #FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
-FRONTEND_CONTAINER_URL = "http://frontend:3000/report"  # Replace with the actual URL of the frontend container
+FRONTEND_CONTAINER_URL = "http://localhost:3000/report"  # Replace with the actual URL of the frontend container
 
 @app.get("/")
 async def greet():
