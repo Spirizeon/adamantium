@@ -40,12 +40,12 @@ const Hero = () => {
         <img src="/logo.png" width={200} alt="Logo" />
         <h1 className="text-5xl font-extrabold text-center lg:text-7xl 2xl:text-8xl">
           <span className="text-transparent bg-gradient-to-br bg-clip-text from-teal-500 via-indigo-500 to-sky-500 dark:from-teal-200 dark:via-indigo-300 dark:to-sky-500">
-            Adamantium
+            Adamantium.RE
           </span>
         </h1>
 
         <p className="max-w-3xl mx-auto text-lg text-center text-gray-700 dark:text-white md:text-xl">
-          ai powered reverse engineering framework backed by rizin
+          Ai powered malware analysis as a service.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3 sm:-mx-2 sm:flex-row sm:justify-center sm:space-y-0">
