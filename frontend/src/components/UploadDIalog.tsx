@@ -11,6 +11,41 @@ export interface UploadDialogProps {
   onUpload: (data: IFile) => Promise<void>;
 }
 
+const report = `
+Objective and Intent:
+
+Simulation of Malicious Behavior: The program is designed to simulate potentially malicious actions. Although it does not perform actual harm, it mimics behaviors that could be part of a malicious attack.
+
+Components:
+
+File Access:
+
+Target File: /etc/passwd is a critical system file containing user account information. The code attempts to read this file, which could be used to gather sensitive data.
+
+Potential Impact: If run with elevated privileges, this code could reveal information about system users, which might be leveraged for further attacks.
+
+Network Activity:
+
+Placeholder Function: The network simulation is a placeholder and does not perform any actual network operations. However, it suggests that real code could be added here for network-based attacks.
+
+Potential Impact: Real network activity could be used for data exfiltration, communication with a remote server, or other malicious purposes.
+
+Overall Design:
+
+Modular Structure: The program is divided into functions that simulate different aspects of malicious behavior—file access and network communication.
+
+Safe Execution: The program does not perform any real malicious actions, but it is structured in a way that could be adapted for malicious purposes if the placeholder functions were implemented.
+
+Security Implications:
+
+Unauthorized File Access: The code could be used to read sensitive information if executed with high privileges. It demonstrates how an attacker might gain access to user data on a system.
+
+Potential for Expansion: The network simulation function indicates that the program could be extended to include network-related attacks, such as sending data to an external server.
+
+Use Case and Risk:Educational or Demonstration Purposes: This code could be used for educational purposes to illustrate how unauthorized file access might be conducted or to demonstrate the structure of a potential attack.
+
+Malicious Use: If adapted with real code in the network simulation function, it could become part of a more sophisticated attack, especially if combined with other malicious actions.`
+
 const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
@@ -49,12 +84,13 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
 
 
     try {
-      // const response = await axios.post('http://localhost:8000/submit/', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-      // console.log(response);
+      console.log("Before API Call");
+      const response = await axios.post('http://0.0.0.0:8000/submit/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response);
 
 
       toast.loading('Uploading...', { id: 'upload' });
@@ -85,7 +121,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
       await onUpload({
         filename: file.name,
         filesize: file.size,
-        report: "This is a report"
+        report: report
       });
 
       toggleModal();
