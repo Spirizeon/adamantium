@@ -84,6 +84,10 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
 
 
     try {
+      // Show 'Uploading...' toast message
+      toast.loading('Uploading...', { id: 'upload' });
+
+      // API call for submission
       console.log("Before API Call");
       const response = await axios.post('http://localhost:8000/submit/', formData, {
         headers: {
@@ -92,45 +96,46 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ onUpload }) => {
       });
       console.log(response);
 
+      // Remove 'Uploading...' toast and show 'Decompiling...' toast message
+      toast.remove('upload');
+      toast.loading('Decompiling...', { id: 'decompile' });
 
-      toast.loading('Uploading...', { id: 'upload' });
+      // Wait for 2 seconds before transitioning to the next stage
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-      setTimeout(() => {
-        toast.remove('upload');
-        toast.loading('Processing...', { id: 'process' });
-        setTimeout(() => {
-          toast.remove('process');
-          toast.loading('Decompiling...', { id: 'decompile' });
-          setTimeout(() => {
-            toast.remove('decompile');
-            toast.loading('Generating report...', { id: 'report' });
-            setTimeout(() => {
-              toast.remove('report');
-              toast.success('Upload successful!');
-            }, 2000);
-          }, 2000);
-        }, 2000);
-      }, 2000);
+      // Remove 'Decompiling...' toast and show 'Generating report...' toast message
+      toast.remove('decompile');
+      toast.loading('Generating report...', { id: 'generateReport' });
 
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('Done after 8 seconds');
-        }, 8000);
-      });
+      // Simulate additional processing time for generating report
+      await new Promise(resolve => setTimeout(resolve, 8000));  // 8 seconds
 
+      // Simulate final processing
       await onUpload({
         filename: file.name,
         filesize: file.size,
         report: response.data
       });
 
+      // Remove 'Generating report...' toast and show 'Upload successful!' toast message
+      toast.remove('generateReport');
+      toast.success('Upload successful!');
+
+      // Toggle modal or perform other final actions
       toggleModal();
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError('Upload failed. Please try again.');
+      // Remove any existing toasts and show error toast if needed
+      toast.remove('upload');
+      toast.remove('decompile');
+      toast.remove('generateReport');
+      toast.error('Upload failed. Please try again.');
     } finally {
+      // Ensure uploading state is updated
       setUploading(false);
     }
+
   };
 
   return (
